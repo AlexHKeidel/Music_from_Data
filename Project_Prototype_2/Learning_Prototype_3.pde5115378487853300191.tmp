@@ -1,0 +1,82 @@
+/**
+ * Learning Prototype 3
+ * Cellular Automaton based on the Game of Life
+ * Created by Alexander Keidel, 22397868 on 16.12.2016
+ * last edited 16.12.2016
+ **/
+public final int CELL_SIZE = 10;
+int time = 0;
+Cell[][] cells; //two dimensional array of cells
+//setup method is called once at the beginning of the program
+void setup() {
+  size(500, 500); //500 by 500 window
+  background(51); //grey background
+  frameRate(60); //set to 60 frames per second
+  cells = new Cell[width / CELL_SIZE][height / CELL_SIZE]; //initialise array
+
+  int[] randomStates = new int[cells.length * cells.length];
+  for (int i = 0; i < randomStates.length; i++) {
+    println("i = " + i);
+    randomStates[i] = (int) random(2);
+  }
+  setupStartingGeneration(randomStates);
+}
+
+//draw is called after setup and loops forever (unless noLoop() has been specified)
+void draw() {
+
+  if (time % 30 == 0) { //every sixty frames
+    background(51); //redraw the background
+    drawAllCells();
+    nextGeneration();
+  }
+  time++; //increment frame counter
+}
+
+void setupStartingGeneration(int[] states) {
+  int stateCounter = 0;
+  for (int i = 0; i < cells.length; i++) {
+    for (int j = 0; j < cells.length; j++) {
+      cells[i][j] = new Cell(i, j, states[stateCounter]);
+      println("i = " + i + " j = " + j + " stateCounter = " + stateCounter);
+      stateCounter++;
+    }
+  }
+}
+/**
+ Conway's Game of Life Rules
+ Any live cell with fewer than two live neighbours dies (referred to as underpopulation or exposure).
+ Any live cell with more than three live neighbours dies (referred to as overpopulation or overcrowding).
+ Any live cell with two or three live neighbours lives, unchanged, to the next generation.
+ Any dead cell with exactly three live neighbours will come to life.
+ */
+void nextGeneration() {
+  //loop through all the cells, ignoring the border of the screen
+  int liveCounter = 0;
+  for (int i = 0; i < cells.length; i++) {
+    for (int j = 0; j < cells.length; j++) {
+      liveCounter = 0; //reset liveCounter
+      liveCounter += cells[i - 1][j - 1].state + cells[i][j - 1].state + cells[i + 1][j - 1].state; //check top row
+      liveCounter += cells[i - 1][j].state + cells[i + 1][j + 1].state;//check middle row
+      liveCounter += cells[i - 1][j + 1].state + cells[i][j + 1].state + cells[i + 1][j + 1].state;// check bottom row
+      if (cells[i][j].state == 0) { //the cell is dead
+        if (liveCounter == 3) cells[i][j].state = 1; //Any dead cell with exactly three live neighbours will come to life.
+      } else //the cell is alive
+      {
+        //Any live cell with fewer than two live neighbours dies (referred to as underpopulation or exposure).
+        //Any live cell with more than three live neighbours dies (referred to as overpopulation or overcrowding).
+        if (liveCounter < 2 || liveCounter > 3) {
+          cells[i][j].state = 0; // kill the cell
+        }
+      }
+    }
+  }
+}
+
+void drawAllCells() {
+  for (int i = 0; i < cells.length; i++) {
+    for (int j = 0; j < cells.length; j++) {
+      cells[i][j].display();
+    }
+  }
+}

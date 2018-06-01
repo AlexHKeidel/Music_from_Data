@@ -1,0 +1,21 @@
+/**
+ * Prototype 3
+ * Created by Alexander Keidel, 22397868 on 19.12.2016
+ * last edited 19.12.2016
+ * A genetic algorithm approach to generating music from the provided crime data
+ **/
+
+EvolutionaryProcess geneticAlgorithm;
+final String target = "bananas";
+final int population = 100;
+final float mutationRate = 0.01;
+
+void setup() {
+  size(800, 600);
+  geneticAlgorithm = new EvolutionaryProcess(target, population, mutationRate);
+}
+
+void draw() {
+  geneticAlgorithm.generateNewPopulation(); //generate a new population
+  
+}
