@@ -7,7 +7,7 @@ The three examples use three different concepts to generate "Music" from the inp
 * Genetic / Evolutionary Algorithm
 * 
 ## Installation
-Install [Processing](processing.org)
+Install [Processing](https://processing.org/)
 
 ## Running the Program
 Just execute the scripts in your Processing IDE. In some cases you can change some variables at the top of the code for different results.
